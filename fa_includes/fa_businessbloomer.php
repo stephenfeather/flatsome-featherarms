@@ -18,3 +18,20 @@ function bloomer_echo_product_date() {
 
 // Change the date format: https://codex.wordpress.org/Function_Reference/the_date
 
+/**
+ * @snippet       Hide Price If Out of Stock @ WooCommerce Frontend
+ * @how-to        Get CustomizeWoo.com FREE
+ * @author        Rodolfo Melogli
+ * @testedwith    WooCommerce 6
+ * @donate $9     https://businessbloomer.com/bloomer-armada/
+ */
+
+add_filter( 'woocommerce_get_price_html', 'bbloomer_hide_price_if_out_stock_frontend', 9999, 2 );
+
+function bbloomer_hide_price_if_out_stock_frontend( $price, $product ) {
+   if ( is_admin() ) return $price; // BAIL IF BACKEND
+   if ( ! $product->is_in_stock() ) {
+      $price = apply_filters( 'woocommerce_empty_price_html', '', $product );
+   }
+   return $price;
+}
