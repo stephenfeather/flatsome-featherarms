@@ -35,3 +35,24 @@ function bbloomer_hide_price_if_out_stock_frontend( $price, $product ) {
    }
    return $price;
 }
+
+/**
+ * @snippet       Save & Display Order Total Weight - WooCommerce Order
+ * @how-to        Get CustomizeWoo.com FREE
+ * @author        Rodolfo Melogli
+ * @compatible    WooCommerce 3.6.4
+ * @donate $9     https://businessbloomer.com/bloomer-armada/
+ */
+
+add_action( 'woocommerce_checkout_update_order_meta', 'bbloomer_save_weight_order' );
+
+function bbloomer_save_weight_order( $order_id ) {
+    $weight = WC()->cart->get_cart_contents_weight();
+    update_post_meta( $order_id, '_cart_weight', $weight );
+}
+
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_delivery_weight_display_admin_order_meta', 10, 1 );
+
+function bbloomer_delivery_weight_display_admin_order_meta( $order ) {
+    echo '<p><strong>Order Weight:</strong> ' . get_post_meta( $order->get_id(), '_cart_weight', true ) . get_option( 'woocommerce_weight_unit' ) . '</p>';
+}
